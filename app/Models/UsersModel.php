@@ -34,10 +34,10 @@ class UsersModel extends Model
             ->join('user_role', 'user_role.role_id = users.role_id');
 
         if ($role_id == null) {
-            $query = $builder->where('users.role_id != 1')->get();
+            $query = $builder->where('users.role_id != 1')->orderBy('users.users_id','DESC')->get();
             return $query->getResultArray();
         } else {
-            $query = $builder->where('users.role_id = ' . $role_id)->get();
+            $query = $builder->where('users.role_id = ' . $role_id)->orderBy('users.users_id','DESC')->get();
             return $query->getResultArray();
         }
     }
@@ -109,16 +109,22 @@ class UsersModel extends Model
 
     public function peringkatMC()
     {
-        $builder = $this->db->table($this->table)->select('users.users_id, users.name');
+        $builder = $this->db->table($this->table)->select('users.users_id, users.name, booking.ulasan');
         $builder->selectCount('booking.id_booking', 'acara');
         $builder->selectSum('booking.jam_acara', 'jam');
         $builder->selectSum('booking.jumlah_peserta', 'peserta');
+        $builder->selectAvg('booking.point', 'poin');
         $builder->join('booking', 'booking.id_mc = users.users_id');
-        $builder->where(['users.role_id' => 2, 'users.is_active' => 1]);
+        $builder->where([
+            'users.role_id' => 2, 
+            'users.is_active' => 1,
+            'booking.di_terima'=>3
+            ]);
         $builder->groupBy('users.users_id');
         $builder->orderBy('acara', 'DESC');
         $builder->orderBy('jam', 'DESC');
         $builder->orderBy('peserta', 'DESC');
+        $builder->orderBy('poin', 'DESC');
 
         return $builder->get(7)->getResultArray();
     }

@@ -14,7 +14,6 @@
       content="Mark Otto, Jacob Thornton, and Bootstrap contributors"
     />
     <meta name="generator" content="Jekyll v4.1.1" />
-    <title>Fathan MC</title>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
@@ -25,20 +24,21 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.min.css"
     />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.min.css"
-    />
     <!-- Custom styles for this template -->
     <link href="/src/css/navbar-top-fixed.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    <style>
+        span.headtext, title {
+            font-family:"SCRIPT MT";
+        }
+    </style>
+    <title>eMCee</title>
   </head>
   <body data-spy="scroll" data-target=".fixed-top">
     <nav class="navbar navbar-expand-md navbar-dark navbar-custom fixed-top">
       <div class="container">
       <a class="navbar-brand" href="/">
-        <span class="text-uppercase font-weight-bold">
-          Fathan's <span class="text-danger">MC</span>
+        <span class="headtext font-weight-bold">eMCee<span class="text-danger"> E = MC<sup>2</sup></span>
         </span>
       </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -129,7 +129,6 @@
                     <input
                       type="time"
                       name="starts"
-                      id="timestart"
                       class="control"
                       step="900"
                       value="<?=  (new DateTime(date('G:i')))->format('H:i') ?>"
@@ -141,7 +140,6 @@
                     <input
                       type="time"
                       name="ends"
-                      id="timeend"
                       class="control"
                       step="900"
                       value="<?=(new DateTime(date('G:i',strtotime('+1 Hour'))))->format('H:i') ?>"
@@ -166,19 +164,18 @@
           
           <div class="container" data-aos="fade-up" data-aos-easing="linear" data-aos-duration="600">
               <h1 class="text-center mb-3"  data-aos="fade-up" data-aos-easing="linear" data-aos-duration="800">
-                  Pengertian <i>Master of Ceremony</i>
+                <i>Master of Ceremony</i>
               </h1>
-              <p class="text-justify"  data-aos="fade-up" data-aos-easing="linear" data-aos-duration="900">
+              <p class="text-justify" style="text-indent:40px;"  data-aos="fade-up" data-aos-easing="linear" data-aos-duration="900">
                   Setiap aktivitas membutuhkan pemimpin atau pemandu aktivitas yang sanggup menghantar aktivitas satu demi satu dengan teratur. Dalam acara-acara ceremonial acara-acara harus disusun sedemikian rupa sehingga suatu aktivitas atau event yang diadakan menarik. Seorang pemandu aktivitas disebut sebagai Master of Cermony (MC). Seorang MC yaitu seseorang yang bertugas untuk pemandu suatu aktivitas supaya sanggup berjalan dengan baik dan lancar. MC atau Master of Ceremony sanggup diartikan sebagai seorang pemimpin suatu aktivitas atau pesta. Seorang MC yaitu seseorang yang mempunyai keterampilan seni dalam bidang improvisasi untuk menghantarkan aktivitas secara teratur, baik dan mempunyai karakteristik yang khas.
               </p>
-              
-              <p class="text-justify"   data-aos="fade-up" data-aos-easing="linear" data-aos-duration="950">
-                  Pengertian MC (Pembawa Acara) dan Tugas Bagi Seorang MC – Seorang MC harus bisa membaca situasi dengan tepat. Ia harus bisa membuat suasana sesuai dengan karakteristik acaranya, dan memungkinkan adanya obrolan denga audiens. MC mempunyai kiprah penting untuk mensukseskan suatu acara. Berbicara akan hal ini, menyulut pengetahuan ihwal adanya fungsi dari Master of Cermony (MC) itu sendiri. Hal ini tidak mengada-ada sebab mengingat seringkali seorang MC merangkap sekaligus sebagai penyanyi, seorang MC merangkap sebagai komedian dan lain-lain.
+              <p class="text-justify" style="text-indent:40px;"  data-aos="fade-up" data-aos-easing="linear" data-aos-duration="950">
+                 Pengertian MC (Pembawa Acara) dan Tugas Bagi Seorang MC – Seorang MC harus bisa membaca situasi dengan tepat. Ia harus bisa membuat suasana sesuai dengan karakteristik acaranya, dan memungkinkan adanya obrolan denga audiens. MC mempunyai kiprah penting untuk mensukseskan suatu acara. Berbicara akan hal ini, menyulut pengetahuan ihwal adanya fungsi dari Master of Cermony (MC) itu sendiri. Hal ini tidak mengada-ada sebab mengingat seringkali seorang MC merangkap sekaligus sebagai penyanyi, seorang MC merangkap sebagai komedian dan lain-lain.
               </p>
-              <h3 class="mb-3"   data-aos="fade-up" data-aos-easing="linear" data-aos-duration="800">Apa itu MC?</h3>
-              <p class="text-justify"  data-aos="fade-up" data-aos-easing="linear" data-aos-duration="1000">
-                  Istilah MC atau pemimpin aktivitas intinya berbeda dengan pembawa acara. Memang dalam banyak kesempatan MC juga disebut sebagai pembawa acara. Namun pembawa acaranya biasanya digunakan pada acara-acara yang sifatnya resmi, sangat terikat pada sopan santun protokoler, dan tidak banyak improvisasi dalam menghantar acara. Hal ini sedikit berbeda dengan MC, seorang MC diberi keleluasan untuk berimprovisasi dan menyesuaikan dengan kondisi dan situasi yang sedang terjadi.
+              <p class="text-justify" style="text-indent:40px;" data-aos="fade-up" data-aos-easing="linear" data-aos-duration="1000">
+                 Istilah MC atau pemimpin aktivitas intinya berbeda dengan pembawa acara. Memang dalam banyak kesempatan MC juga disebut sebagai pembawa acara. Namun pembawa acaranya biasanya digunakan pada acara-acara yang sifatnya resmi, sangat terikat pada sopan santun protokoler, dan tidak banyak improvisasi dalam menghantar acara. Hal ini sedikit berbeda dengan MC, seorang MC diberi keleluasan untuk berimprovisasi dan menyesuaikan dengan kondisi dan situasi yang sedang terjadi.
               </p>
+              <h2 class="text-center font-weight-bold" data-aos="fade-down" data-aos-easing="linear" data-aos-duration="1000"><span class="headtext text-danger">E = MC<sup>2</sup></span> (setiap Event membutuhkan para MC)</h2>
           </div>
       </div>
       <div id="mc" class="main-box bg-dark" style="min-height: 100vh;padding-top:70px; color:white;">
@@ -236,27 +233,37 @@
           <tr>
             <th>#</th>
             <th>Nama MC</th>
-            <th>Total Acara</th>
-            <th>Total Jam Acara</th>
-            <th colspan="2">Total Peserta</th>
+            <th>Total Acara & Jam Acara</th>
+            <th>Rating</th>
+            <th colspan="2">Ulasan</th>
           </tr>
         </thead>
         <tbody>
           <?php
           $i = 1;
           foreach ($peringkat_mc as $data) : ?>
-            <tr data-aos="fade-down" data-aos-easing="easingIn" data-aos-duration="<?= 700 + (100 * $i) ?>">
+            <tr valign="middle">
               <td width="50"><?= $i++ ?></td>
               <td><?= $data['name'] ?></td>
-              <td width="200"><?= $data['acara'] ?> Acara</td>
-              <td width="200"><?= $data['jam'] ?> Jam</td>
-              <td width="200"><?= $data['peserta'] ?> Orang</td>
-              <td width="100"><a href="/booking?mc=<?= $data['users_id'] ?>" class="btn btn-sm btn-success w-100 p-1">BOOKING</a></td>
+              <td width="200"><?= $data['acara'] ?> Acara & <?= $data['jam'] ?> Jam</td>
+              <td width="200"><?= $data['poin'] ?>/5 poin</td>
+              <td width="200"><span class="p small">
+                  <?=$data['ulasan']?>
+              </span></td>
+              <td width="100">
+                  <?php if($session->has('id') && $data['users_id'] == $session->id): ?>
+                  <a class="btn btn-info btn-sm" href="<?= $session->route ?>">
+                    Area MC
+                  </a>
+                  <?php else:?>
+                  <a href="/booking?mc=<?= $data['users_id'] ?>" class="btn btn-sm btn-success w-100 p-1">BOOKING</a>
+                  <?php endif?>
+              </td>
             </tr>
             <?php endforeach;
           if (count($peringkat_mc) != 7) :
             for ($j = count($peringkat_mc) + 1; $j <= 7; $j++) : ?>
-              <tr data-aos="fade-down" data-aos-easing="easingIn" data-aos-duration="<?= 700 + (100 * $j) ?>">
+              <tr>
                 <td width="50"><?= $j ?></td>
                 <td> - </td>
                 <td width="200">0 Acara</td>
@@ -314,92 +321,11 @@
 
     <script src="/src/js/main.bundle.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/timepicker.js/latest/timepicker.min.js"></script>
     <script>
         AOS.init();
+        
+       
     </script>
-    <!-- <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    <script src="https://code.jquery.com/jquery-3.x-git.slim.js"></script>
-    <script
-      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-      crossorigin="anonymous"
-    ></script> -->
-    <!-- <script>
-      window.jQuery ||
-        document.write(
-          '<script src="../assets/js/vendor/jquery.slim.min.js"><\/script>'
-        );
-    </script> -->
-    <!-- <script src="../assets/dist/js/bootstrap.bundle.min.js"></script> -->
-    <!-- <script>
-      $(document).ready(function () {
-        const inView = (element) => {
-          var top = element.offsetTop;
-          var height = element.offsetHeight;
-
-          while (element.offsetParent) {
-            element = element.offsetParent;
-            top += element.offsetTop;
-          }
-
-          return (
-            top < window.pageYOffset + window.innerHeight &&
-            top + height > window.pageYOffset
-          );
-        };
-        const init = () => {
-          function update() {
-            let next = false;
-            $(".main-box").each(function (index, el) {
-              const cur = $('a[href="#' + el.id + '"]');
-
-              cur.on("click", function (e) {
-                if (this.hash !== "") {
-                  console.log($(this.hash).offset().top);
-                  e.preventDefault();
-                  console.log($("html, body").animate());
-                  $("html, body").animate(
-                    {
-                      scrollTop: $(this.hash).offset().top,
-                    },
-                    500,
-                    "easeInOut",
-                    function () {
-                      window.location.hash = this.hash;
-                    }
-                  );
-                }
-              });
-
-              if ($(window).scrollTop() >= el.offsetTop && !next) {
-                cur.addClass("active");
-                next = true;
-              } else {
-                cur.removeClass("active");
-              }
-            });
-          }
-
-          update();
-          window.addEventListener("scroll", update);
-        };
-
-        init();
-
-        function checkScroll() {
-          if ($(window).scrollTop() > 20) {
-            $(".navbar").addClass("scrolled");
-          } else {
-            $(".navbar").removeClass("scrolled");
-          }
-        }
-
-        if ($(".navbar").length > 0) {
-          $(window).on("scroll load resize", function () {
-            checkScroll();
-          });
-        }
-      });
-    </script> -->
   </body>
 </html>

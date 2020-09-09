@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
 
-    <title>Fathan MC</title>
+    <title>eMCee</title>
 
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
@@ -15,6 +15,11 @@
     <link rel="stylesheet" href="/src/css/adminlte.min.css" />
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet" />
+    <style>
+        span.headtext {
+            font-family:"SCRIPT MT";
+        }
+    </style>
 </head>
 
 <body class="hold-transition sidebar-mini">

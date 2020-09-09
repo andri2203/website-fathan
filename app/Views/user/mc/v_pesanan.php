@@ -58,7 +58,7 @@
                                                 <td><?= date('d F Y, G:i', strtotime($row['tanggal_jam'])) ?></td>
                                                 <td><?= $row['name'] ?></td>
                                                 <td><?= $row['phone'] ?></td>
-                                                <td><?= $row['budget'] ?></td>
+                                                <td>Rp. <?= number_format($row['budget'], 0, '.', ',') ?></td>
                                                 <td>
                                                     <button class="btn btn-info" data-toggle="modal" data-target="#modal-<?= $row['id_booking'] ?>">Rincian Acara</button>
                                                     <div class="modal fade" id="modal-<?= $row['id_booking'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -103,7 +103,7 @@
                                                                             </div>
                                                                         </div>
                                                                         <div class="form-group row border-bottom">
-                                                                            <label for="staticEmail" class="col-sm-3 col-form-label">Profil</label>
+                                                                            <label for="staticEmail" class="col-sm-3 col-form-label">Hadirin</label>
                                                                             <div class="col-sm-9">
                                                                                 <input type="text" readonly class="form-control-plaintext" value="<?= $row['profil_peserta'] ?>">
                                                                             </div>
@@ -127,9 +127,11 @@
                                                                     </form>
                                                                     <div class="d-flex justify-content-center">
                                                                         <?php if ($row['di_terima'] == 1) : ?>
-                                                                            <span class="btn btn-sm btn-success">Diterima</span>
+                                                                            <a href="/mc/selesai/<?= $row['id_booking'] ?>" onclick="return confirm('Apakah Acara ini telah selesai? Klik OK jika acara telah anda laksanakan.')" class="btn btn-sm btn-success">Diterima</a>
                                                                         <?php elseif ($row['di_terima'] == 2) : ?>
                                                                             <span class="btn btn-sm btn-danger">Ditolak</span>
+                                                                        <?php elseif ($row['di_terima'] == 3) : ?>
+                                                                            <span class="btn btn-sm btn-success">Selesai</span>
                                                                         <?php else : ?>
                                                                             <a href="/mc/tolak/<?= $row['id_booking'] ?>" class="btn btn-danger mr-3" onclick="return confirm('Yakin ingin menolak?')">Tolak</a>
                                                                             <a href="/mc/terima/<?= $row['id_booking'] ?>" class="btn btn-success" onclick="return confirm('Anda akan menerima tawaran MC ini.')">Terima</a>
@@ -142,9 +144,44 @@
                                                 </td>
                                                 <td>
                                                     <?php if ($row['di_terima'] == 1) : ?>
-                                                        <span class="btn btn-sm btn-success">Diterima</span>
+                                                        <a href="/mc/selesai/<?= $row['id_booking'] ?>" onclick="return confirm('Apakah Acara ini telah selesai? Klik OK jika acara telah anda laksanakan.')" class="btn btn-sm btn-success">Diterima</a>
                                                     <?php elseif ($row['di_terima'] == 2) : ?>
                                                         <span class="btn btn-sm btn-danger">Ditolak</span>
+                                                    <?php elseif ($row['di_terima'] == 3) : ?>
+                                                        <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#exampleModal">
+                                                            Selesai
+                                                        </button>
+
+                                                        <!-- Modal -->
+                                                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                            <div class="modal-dialog">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title" id="exampleModalLabel">Ulasan</h5>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div class="form-group">
+                                                                            <label class="control-label">
+                                                                                Poin <div id="badge-<?= $row['id_booking'] ?>" class="badge badge-info">
+                                                                                    <?= $row['point'] ?> <i class="fas fa-star"></i>
+                                                                                </div>
+                                                                            </label>
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label class="control-label" for="text-<?= $row['id_booking'] ?>">Ulasan / Komentar</label>
+                                                                            <textarea class="form-control-plaintext" id="text-<?= $row['id_booking'] ?>" maxlength="70" name="ulasan" rows="3"><?= $row['ulasan'] ?></textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                        <button type="button" class="btn btn-primary">Save changes</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     <?php else : ?>
                                                         <span class="btn btn-sm btn-warning">Proses</span>
                                                     <?php endif ?>

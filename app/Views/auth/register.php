@@ -4,10 +4,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fathan MC - Register</title>
+  <title>eMCee - Register</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
   <link rel="stylesheet" href="/src/css/sign-style.css" />
+  <style>
+        span.headtext {
+            font-family:"SCRIPT MT";
+        }
+    </style>
 </head>
 
 <body>
@@ -16,8 +21,10 @@
     <header>
       <div class="container">
         <a href="/">
-          <h4 class="text-uppercase font-weight-bold">
-            Fathan's <span class="text-danger">MC</span>
+          <h4>
+            
+<span class="headtext font-weight-bold">eMCee<span class="text-danger"> E = MC<sup>2</sup></span>
+        </span>
           </h4>
         </a>
       </div>

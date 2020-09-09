@@ -102,6 +102,48 @@
                                                         <span class="btn btn-sm btn-success">Diterima</span>
                                                     <?php elseif ($row['di_terima'] == 2) : ?>
                                                         <span class="btn btn-sm btn-danger">Ditolak</span>
+                                                    <?php elseif ($row['di_terima'] == 3) : ?>
+                                                    <div class="btn-group-vertical">
+                                                        <span class="btn btn-sm btn-success">Selesai</span>
+                                                        <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#modal-<?= $row['id_booking'] ?>">Ulasan</button>
+                                                        <div class="modal fade" id="modal-<?= $row['id_booking'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                          <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                              <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel">Beri Ulasan & Poin</h5>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                  <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                              </div>
+                                                                <form action="/pelanggan/ulasan/<?= $row['id_booking'] ?>" method="POST">
+                                                                  <div class="modal-body">
+                                                                        <div class="form-group">
+                                                                            <label class="control-label">
+                                                                                Poin <div id="badge-<?= $row['id_booking'] ?>" class="badge badge-info"></div>
+                                                                            </label>
+                                                                            <input type="range" name="poin" class="form-control-range" id="ranged-<?= $row['id_booking'] ?>" min="1" max="5" step="0.1" value="<?= $row['point'] == 0 ? 1  :$row['point'] ?>" />
+                                                                            <script>
+                                                                                var ranged = document.getElementById('ranged-<?= $row['id_booking'] ?>')
+                                                                                document.getElementById('badge-<?= $row['id_booking'] ?>').innerText = ranged.value
+                                                                                ranged.addEventListener('input', function(e){
+                                                                                    document.getElementById('badge-<?= $row['id_booking'] ?>').innerText = e.target.value
+                                                                                })
+                                                                            </script>
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label class="control-label" for="text-<?= $row['id_booking'] ?>">Ulasan / Komentar</label>
+                                                                            <textarea class="form-control" id="text-<?= $row['id_booking'] ?>" maxlength="70" name="ulasan" rows="3"><?=$row['ulasan']?></textarea>
+                                                                        </div>
+                                                                  </div>
+                                                                  <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                                                                    <button type="submit" class="btn btn-primary">Buat Ulasan</button>
+                                                                  </div>
+                                                                </form>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                    </div>
                                                     <?php else : ?>
                                                         <span class="btn btn-sm btn-warning">Proses</span>
                                                     <?php endif ?>

@@ -25,8 +25,8 @@ class Booking extends BaseController
 
         if (isset($_GET['search'])) {
 
-            $date_start = $_GET['date'] . ' ' . $_GET['start'];
-            $date_end = $_GET['date'] . ' ' . $_GET['end'];
+            $date_start = $_GET['date'] . ' ' . $_GET['starts'];
+            $date_end = $_GET['date'] . ' ' . $_GET['ends'];
             $search = '';
 
             switch ($_GET['type']) {

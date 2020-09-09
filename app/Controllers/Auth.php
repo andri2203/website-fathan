@@ -93,11 +93,17 @@ class Auth extends AuthController
             'gender' => $this->request->getPost('gender'),
             'email' => $this->request->getPost('email'),
             'password' => md5($this->request->getPost('password')),
+            'image'=>'',
             'phone' => $this->request->getPost('phone'),
             'create_at' => date('Y:m:d H:i:s'),
-            'is_active' => 0
+            'is_active' => $this->request->getPost('user_role')==3?1:0
         );
         $usersModel->insert($data);
+        
+        if($this->request->getPost('user_role')==3){
+            return redirect()->to('/login');
+        }
+        
         return redirect()->to('/login')->with('login', 'Akun anda berhasil didaftarkan. Silahkan tunggu, akun anda sedang di validasi oleh admin.');
     }
 

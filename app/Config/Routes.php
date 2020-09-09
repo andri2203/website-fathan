@@ -100,11 +100,15 @@ $routes->group('mc', function ($routes) {
 	$routes->post('buat_promosi', 'MC::buat_promosi');
 	$routes->post('edit_promosi', 'MC::edit_promosi');
 	$routes->get('hapus_promosi/(:num)', 'MC::hapus_promosi/$1');
+	$routes->get('terima/(:num)', 'MC::terima/$1');
+	$routes->get('tolak/(:num)', 'MC::tolak/$1');
+	$routes->get('selesai/(:num)', 'MC::selesai/$1');
 });
 
 $routes->group('pelanggan', function ($routes) {
 	$routes->get('/', 'Pelanggan::index');
 	$routes->get('pesanan', 'Pelanggan::pesanan');
+	$routes->post('ulasan/(:num)', 'Pelanggan::ulasan/$1');
 });
 
 $routes->group('profil', function ($routes) {
@@ -117,6 +121,7 @@ $routes->group('profil', function ($routes) {
 	$routes->post('ganti_password', 'Profile::ganti_password');
 	$routes->post('ganti_foto', 'Profile::ganti_foto');
 });
+
 
 /**
  * --------------------------------------------------------------------

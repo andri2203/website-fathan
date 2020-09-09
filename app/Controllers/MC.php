@@ -102,7 +102,7 @@ class MC extends McController
         return redirect()->to('/mc/promosi')->with('success', 'Promosi Berhasil diubah');
     }
 
-    public function hapus_promosi($id_promosi = null)
+    public function hapus_promosi($id_promosi)
     {
         $promosiModel = new \App\Models\PromosiModel();
         $promosiModel->delete($id_promosi);
@@ -122,4 +122,12 @@ class MC extends McController
         $bookingModel->update($id_booking, ['di_terima' => 2]);
         return redirect()->to('/mc/booking')->with('success', 'Booking MC Berhasil ditolak');
     }
+
+    public function selesai($id_booking)
+    {
+        $bookingModel = new \App\Models\BookingModel();
+        $bookingModel->update($id_booking, ['di_terima' => 3]);
+        return redirect()->to('/mc/booking')->with('success', 'Konfirmasi acara selesai. Acara telah selesai diselenggarakan.');
+    }
+    
 }

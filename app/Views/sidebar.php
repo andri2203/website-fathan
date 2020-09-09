@@ -5,10 +5,8 @@ $segment = explode('/', $uri);
 ?>
 <aside class="main-sidebar sidebar-dark-success elevation-4">
     <!-- Brand Logo -->
-    <a href="/" class="brand-link">
-        <img src="/src/images/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: 0.8;" />
-        <span class="brand-text text-uppercase font-weight-bold">
-            Fathan's <span class="text-danger">MC</span>
+    <a href="/" class="brand-link text-center">
+        <span class="headtext font-weight-bold">eMCee<span class="text-danger"> E = MC<sup>2</sup></span>
         </span>
     </a>
 
@@ -30,7 +28,7 @@ $segment = explode('/', $uri);
                 </div>
             <?php endif ?>
             <div class="info">
-                <a href="/account" class="d-block"><?= $session->name ?></a>
+                <a href="/profil" class="d-block"><?= $session->name ?></a>
 
             </div>
         </div>

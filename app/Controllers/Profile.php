@@ -10,6 +10,7 @@ class Profile extends ProfileController
 
     public function index()
     {
+        return redirect()->to('/profil/profil_saya');
     }
 
     public function profil_saya()

@@ -23,6 +23,8 @@ class BookingModel extends Model
         'keterangan',
         'budget',
         'di_terima',
+        'point',
+        'ulasan'
     ];
 
     public function getPesananBy_IdPemesan($id_pemesan)
@@ -141,7 +143,7 @@ class BookingModel extends Model
     {
         $builder = $this->db->table($this->table);
         $builder->selectSum('budget', 'saldo');
-        $builder->where(['id_mc' => $id_mc, 'di_terima' => 1]);
+        $builder->where(['id_mc' => $id_mc, 'di_terima' => 3]);
         return $builder->get()->getRowArray();
     }
 

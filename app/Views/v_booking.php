@@ -10,7 +10,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
 
-    <title>Fathan MC | Booking</title>
+    <title>eMCee | Booking</title>
 
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="/dist/fontawesome-free/css/all.min.css">
@@ -27,6 +27,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="/dist/aos/css/aos.css">
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <style>
+        span.brand-text {
+            font-family:"SCRIPT MT";
+        }
+    </style>
 </head>
 
 <body class="hold-transition layout-top-nav layout-navbar-fixed">
@@ -36,8 +41,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <nav class="main-header navbar navbar-expand-md navbar-light navbar-dark">
             <div class="container">
                 <a href="/" class="navbar-brand">
-                    <span class="brand-text  text-uppercase font-weight-bold">
-                        Fathan's <span class="text-danger">MC</span>
+                    <span class="brand-text font-weight-bold">
+                        eMCe <span class="text-danger"> E = mc<sup>2</sup></span>
                     </span>
                 </a>
 
@@ -84,7 +89,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <div class="content">
                 <div class="container">
                     <form id="form_search" action="/booking" role="search" class="row mb-1" data-aos="fade-left" data-aos-easing="linear" data-aos-duration="700" autocomplete="off">
-                        <div class="form-group col">
+                        <div class="form-group col-md-6 col-sm-12">
                             <div class="input-group">
                                 <?php $cond_type = isset($_GET['type']) ?>
                                 <select name="type" id="type" class="form-control form-control-sm">
@@ -100,14 +105,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group col-5">
+                        <div class="form-group col-md-5 col-sm-12">
                             <div class="input-group">
                                 <input type="text" class="form-control form-control-sm" name="date" id="date" placeholder="Tanggal" value="<?= isset($_GET['date']) ? $_GET['date'] : '' ?>">
-                                <input type="text" class="form-control form-control-sm" name="start" id="start" placeholder="Jam Awal" value="<?= isset($_GET['start']) ? $_GET['start'] : '' ?>">
-                                <input type="text" class="form-control form-control-sm" name="end" id="end" placeholder="Jam Akhir" value="<?= isset($_GET['end']) ? $_GET['end'] : '' ?>">
+                                <input type="text" class="form-control form-control-sm" name="starts" id="starts" placeholder="Jam Awal" value="<?= isset($_GET['starts']) ? $_GET['starts'] : '' ?>">
+                                <input type="text" class="form-control form-control-sm" name="ends" id="ends" placeholder="Jam Akhir" value="<?= isset($_GET['ends']) ? $_GET['ends'] : '' ?>">
                             </div>
                         </div>
-                        <div class="form-group col-1">
+                        <div class="form-group col-md-1 col-sm-12">
                             <button type="submit" class="btn btn-sm btn-info w-100"><i class="fas fa-search"></i></button>
                         </div>
                     </form>
@@ -123,7 +128,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                             <select name="acara" id="acara" class="form-control form-control-sm">
                                                 <option value="">-- Pilih Acara</option>
                                                 <?php foreach ($jenis_acara as $ja) : ?>
-                                                    <option value="<?= $ja['id_jenis_acara'] ?>"><?= $ja['jenis_acara'] ?></option>
+                                                    <option value="<?= $ja['id_jenis_acara'] ?>"<?= isset($_GET['search']) && $_GET['search'] == $ja['id_jenis_acara'] ? 'selected' : '' ?>><?= $ja['jenis_acara'] ?></option>
                                                 <?php endforeach ?>
                                             </select>
                                             <div class="feedback"></div>
@@ -144,7 +149,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                             <div class="feedback"></div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="profil">5. Profil peserta acaranya seperti apa?</label>
+                                            <label for="profil">5. Profil peserta/hadirin acaranya seperti apa?</label>
                                             <select name="profil" id="profil" class="form-control form-control-sm">
                                                 <option value="">-- Pilih Profil</option>
                                                 <option value="Karyawan Kantoran">Karyawan Kantoran</option>
@@ -174,7 +179,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <?php if ($session->has('id')) : ?>
                                             <button type="submit" class="btn btn-success float-right">BOOKING</button>
                                         <?php else : ?>
-                                            <a href="/login" class="btn btn-success float-right">LOGIN</a>
+                                            <a href="/login" class="btn btn-success float-right">PROSES</a>
                                         <?php endif ?>
                                     </div>
                                 </div><!-- /.card -->
@@ -182,6 +187,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             </div>
                             <!-- /.col-md-6 -->
                             <div class="col-lg-8">
+                                <?php if (count($mc) > 0): ?>
+                                
                                 <div class="row">
                                     <?php
                                     $i = 1;
@@ -219,6 +226,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         </div>
                                     <?php endforeach ?>
                                 </div>
+                                <?php else:?>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="alert alert-info">Ops!!! MC yang anda cari tidak ditemukan, Coba cari lagi.</div>
+                                    </div>
+                                </div>
+                                <?php endif;?>
                             </div>
                             <!-- /.col-md-6 -->
                         </div>
@@ -408,10 +422,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 defaultDate: new Date(),
                 minDate: new Date(),
             });
-            $('#start, #end').datetimepicker({
+            $('#starts, #ends').datetimepicker({
                 ownerDocument: document,
                 contentWindow: window,
-                value: '',
                 rtl: false,
                 format: 'HH:mm',
                 formatTime: 'HH:mm',
@@ -420,7 +433,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 timepicker: true,
                 datepicker: false,
                 weeks: false,
-                minTime: '10:00',
                 // defaultTime: '10:00',
             })
 
