@@ -115,6 +115,8 @@ $routes->group('pelanggan', function ($routes) {
 	$routes->group('transaksi', function ($routes) {
 		$routes->get('/', 'Transaksi::view_pelanggan');
 		$routes->post('add/(:num)', 'Transaksi::add_transaksi/$1');
+		$routes->post('(:num)/update', 'Transaksi::update_transaksi/$1');
+		$routes->post('pelunasan/(:num)', 'Transaksi::pelunasan_transaksi/$1');
 	});
 });
 

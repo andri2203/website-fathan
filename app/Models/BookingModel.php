@@ -142,8 +142,9 @@ class BookingModel extends Model
     public function numOfJobBudget($id_mc)
     {
         $builder = $this->db->table($this->table);
-        $builder->selectSum('budget', 'saldo');
-        $builder->where(['id_mc' => $id_mc, 'di_terima' => 3]);
+        $builder->selectSum('transaksi.jumlah', 'saldo');
+        $builder->join('transaksi', 'transaksi.id_booking = ' . $this->table . '.id_booking');
+        $builder->where([$this->table . '.id_mc' => $id_mc]);
         return $builder->get()->getRowArray();
     }
 
