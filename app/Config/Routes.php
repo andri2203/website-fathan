@@ -2,8 +2,6 @@
 
 namespace Config;
 
-use CodeIgniter\CodeIgniter;
-use COM;
 
 // Create a new instance of our RouteCollection class.
 $routes = Services::routes();
@@ -103,12 +101,21 @@ $routes->group('mc', function ($routes) {
 	$routes->get('terima/(:num)', 'MC::terima/$1');
 	$routes->get('tolak/(:num)', 'MC::tolak/$1');
 	$routes->get('selesai/(:num)', 'MC::selesai/$1');
+
+	$routes->group('transaksi', function ($routes) {
+		$routes->get('/', 'Transaksi::view_mc');
+	});
 });
 
 $routes->group('pelanggan', function ($routes) {
 	$routes->get('/', 'Pelanggan::index');
 	$routes->get('pesanan', 'Pelanggan::pesanan');
 	$routes->post('ulasan/(:num)', 'Pelanggan::ulasan/$1');
+
+	$routes->group('transaksi', function ($routes) {
+		$routes->get('/', 'Transaksi::view_pelanggan');
+		$routes->post('add/(:num)', 'Transaksi::add_transaksi/$1');
+	});
 });
 
 $routes->group('profil', function ($routes) {

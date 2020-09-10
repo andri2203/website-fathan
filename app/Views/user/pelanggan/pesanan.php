@@ -66,66 +66,129 @@
                                                 <td><?= $row['profil_peserta'] ?></td>
                                                 <td><?= $row['alamat'] ?></td>
                                                 <td><?= $row['keterangan'] ?></td>
-                                                <td><?= $row['budget'] ?></td>
-                                                <td <?= $row['di_terima'] != 0 ? 'colspan="2"':'' ?> class="text-center">
+                                                <td>Rp. <?= number_format($row['budget'], 0, '.', ',') ?></td>
+                                                <td <?= $row['di_terima'] != 0 ? 'colspan="2"' : '' ?> class="text-center">
                                                     <?php if ($row['di_terima'] == 1) : ?>
-                                                        <span class="btn btn-sm btn-success">Diterima</span>
+                                                        <?php if (count($transaksi($row['id_booking'])) == 0) : ?>
+                                                            <button class="btn btn-sm btn-warning" data-toggle="modal" data-target="#trans-<?= $row['id_booking'] ?>">Pembayaran</button>
+                                                            <div class="modal fade text-left" id="trans-<?= $row['id_booking'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                                <div class="modal-dialog">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header">
+                                                                            <h5 class="modal-title">Transaksi</h5>
+                                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                                <span aria-hidden="true">&times;</span>
+                                                                            </button>
+                                                                        </div>
+                                                                        <form action="/pelanggan/transaksi/add/<?= $row['id_booking'] ?>" method="post">
+                                                                            <div class="modal-body">
+                                                                                <div class="form-group">
+                                                                                    <label for="jenis_transaksi_<?= $row['id_booking'] ?>" class="control-label">Jenis Transaksi</label>
+                                                                                    <select name="jenis_transaksi_<?= $row['id_booking'] ?>" id="jenis_transaksi_<?= $row['id_booking'] ?>" class="form-control" required>
+                                                                                        <option value="0" persen="0">-- Pilih Jenis Transaksi</option>
+                                                                                        <?php foreach ($jenisTransaksi as $jt) : ?>
+                                                                                            <option value="<?= $jt->id_jenis_transaksi ?>" persen="<?= $jt->persen ?>"><?= $jt->jenis_transaksi ?></option>
+                                                                                        <?php endforeach; ?>
+                                                                                    </select>
+                                                                                </div>
+                                                                                <div class="form-group">
+                                                                                    <label for="budget_<?= $row['id_booking'] ?>" class="control-label">Budget Maksimal</label>
+                                                                                    <input type="number" name="budget_<?= $row['id_booking'] ?>" id="budget_<?= $row['id_booking'] ?>" value="<?= $row['budget'] ?>" class="form-control" readonly>
+                                                                                </div>
+                                                                                <div class="form-group">
+                                                                                    <label for="total_<?= $row['id_booking'] ?>" class="control-label">Total Pembayaran</label>
+                                                                                    <input type="number" value="0" name="total_<?= $row['id_booking'] ?>" id="total_<?= $row['id_booking'] ?>" class="form-control" readonly>
+                                                                                </div>
+                                                                                <div class="form-group">
+                                                                                    <label for="exampleInputFile">Bukti Pembayaran</label>
+                                                                                    <div class="input-group">
+                                                                                        <div class="custom-file">
+                                                                                            <input type="file" class="custom-file-input" name="file_<?= $row['id_booking'] ?>" id="file_<?= $row['id_booking'] ?>">
+                                                                                            <label class="custom-file-label" for="file_<?= $row['id_booking'] ?>">Pilih Gambar</label>
+                                                                                        </div>
+                                                                                        <div class="input-group-append">
+                                                                                            <span class="input-group-text">Upload</span>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="modal-footer">
+                                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                                                                                <button type="submit" class="btn btn-primary">Transaksi</button>
+                                                                            </div>
+                                                                            <script>
+                                                                                document.getElementById("jenis_transaksi_<?= $row['id_booking'] ?>").addEventListener('change', function(ev) {
+                                                                                    const opti = document.querySelector('option[value="' + ev.target.value + '"]')
+                                                                                    const persen = opti.getAttribute('persen')
+                                                                                    const res = persen * document.getElementById("budget_<?= $row['id_booking'] ?>").value
+                                                                                    document.getElementById("total_<?= $row['id_booking'] ?>").value = res
+                                                                                });
+                                                                            </script>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        <?php else :
+                                                            $trans = $transaksi($row['id_booking']);
+                                                        ?>
+                                                            <span class="btn btn-sm btn-success">Diterima</span>
+                                                        <?php endif; ?>
                                                     <?php elseif ($row['di_terima'] == 2) : ?>
                                                         <span class="btn btn-sm btn-danger">Ditolak</span>
                                                     <?php elseif ($row['di_terima'] == 3) : ?>
-                                                    <div class="btn-group">
-                                                        <span class="btn btn-sm btn-success">Selesai</span>
-                                                        <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#modal-<?= $row['id_booking'] ?>">Ulasan</button>
-                                                        <div class="modal fade" id="modal-<?= $row['id_booking'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                          <div class="modal-dialog">
-                                                            <div class="modal-content">
-                                                              <div class="modal-header">
-                                                                <h5 class="modal-title" id="exampleModalLabel">Beri Ulasan & Poin</h5>
-                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                  <span aria-hidden="true">&times;</span>
-                                                                </button>
-                                                              </div>
-                                                                <form action="/pelanggan/ulasan/<?= $row['id_booking'] ?>" method="POST">
-                                                                  <div class="modal-body">
-                                                                        <div class="form-group">
-                                                                            <label class="control-label">
-                                                                                Poin <div id="badge-<?= $row['id_booking'] ?>" class="badge badge-info"></div>
-                                                                            </label>
-                                                                            <input type="range" name="poin" class="form-control-range" id="ranged-<?= $row['id_booking'] ?>" min="1" max="5" step="0.1" value="<?= $row['point'] == 0 ? 1  :$row['point'] ?>" />
-                                                                            <script>
-                                                                                var ranged = document.getElementById('ranged-<?= $row['id_booking'] ?>')
-                                                                                document.getElementById('badge-<?= $row['id_booking'] ?>').innerText = ranged.value
-                                                                                ranged.addEventListener('input', function(e){
-                                                                                    document.getElementById('badge-<?= $row['id_booking'] ?>').innerText = e.target.value
-                                                                                })
-                                                                            </script>
+                                                        <div class="btn-group">
+                                                            <span class="btn btn-sm btn-success">Selesai</span>
+                                                            <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#modal-<?= $row['id_booking'] ?>">Ulasan</button>
+                                                            <div class="modal fade" id="modal-<?= $row['id_booking'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                                <div class="modal-dialog">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header">
+                                                                            <h5 class="modal-title" id="exampleModalLabel">Beri Ulasan & Poin</h5>
+                                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                                <span aria-hidden="true">&times;</span>
+                                                                            </button>
                                                                         </div>
-                                                                        <div class="form-group">
-                                                                            <label class="control-label" for="text-<?= $row['id_booking'] ?>">Ulasan / Komentar</label>
-                                                                            <textarea class="form-control" id="text-<?= $row['id_booking'] ?>" maxlength="70" name="ulasan" rows="3"><?=$row['ulasan']?></textarea>
-                                                                        </div>
-                                                                  </div>
-                                                                  <div class="modal-footer">
-                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-                                                                    <button type="submit" class="btn btn-primary">Buat Ulasan</button>
-                                                                  </div>
-                                                                </form>
+                                                                        <form action="/pelanggan/ulasan/<?= $row['id_booking'] ?>" method="POST">
+                                                                            <div class="modal-body">
+                                                                                <div class="form-group">
+                                                                                    <label class="control-label">
+                                                                                        Poin <div id="badge-<?= $row['id_booking'] ?>" class="badge badge-info"></div>
+                                                                                    </label>
+                                                                                    <input type="range" name="poin" class="form-control-range" id="ranged-<?= $row['id_booking'] ?>" min="1" max="5" step="0.1" value="<?= $row['point'] == 0 ? 1  : $row['point'] ?>" />
+                                                                                    <script>
+                                                                                        var ranged = document.getElementById('ranged-<?= $row['id_booking'] ?>')
+                                                                                        document.getElementById('badge-<?= $row['id_booking'] ?>').innerText = ranged.value
+                                                                                        ranged.addEventListener('input', function(e) {
+                                                                                            document.getElementById('badge-<?= $row['id_booking'] ?>').innerText = e.target.value
+                                                                                        })
+                                                                                    </script>
+                                                                                </div>
+                                                                                <div class="form-group">
+                                                                                    <label class="control-label" for="text-<?= $row['id_booking'] ?>">Ulasan / Komentar</label>
+                                                                                    <textarea class="form-control" id="text-<?= $row['id_booking'] ?>" maxlength="70" name="ulasan" rows="3"><?= $row['ulasan'] ?></textarea>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="modal-footer">
+                                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                                                                                <button type="submit" class="btn btn-primary">Buat Ulasan</button>
+                                                                            </div>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
                                                             </div>
-                                                          </div>
                                                         </div>
-                                                    </div>
                                                     <?php else : ?>
                                                         <span class="btn btn-sm btn-warning">Proses</span>
                                                     <?php endif ?>
                                                 </td>
-                                                        <?php if ($row['di_terima'] == 0) : ?>
-                                                <td>
-                                                    <div class="btn-group-vertical">
-                                                        <!--<a href="/booking/update/<?= $row['id_booking'] ?>" class="btn btn-sm btn-warning"><i class="fas fa-pencil-alt"></i></a>-->
-                                                        <a href="/booking/delete/<?= $row['id_booking'] ?>" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
-                                                    </div>
-                                                </td>
-                                                        <?php endif?>
+                                                <?php if ($row['di_terima'] == 0) : ?>
+                                                    <td>
+                                                        <div class="btn-group-vertical">
+                                                            <!--<a href="/booking/update/<?= $row['id_booking'] ?>" class="btn btn-sm btn-warning"><i class="fas fa-pencil-alt"></i></a>-->
+                                                            <a href="/booking/delete/<?= $row['id_booking'] ?>" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
+                                                        </div>
+                                                    </td>
+                                                <?php endif ?>
                                             </tr>
                                         <?php endforeach ?>
                                     </tbody>

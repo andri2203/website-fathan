@@ -34,9 +34,17 @@ class Pelanggan extends CustomersController
         }
 
         $booking = new \App\Models\BookingModel();
+        $jenisTransaksi = new \App\Models\JenisTransaksi();
+        $transaksi = new \App\Models\Transaksi();
+
         $data = [
             'session' => $this->session,
             'pesanan' => $booking->getPesananBy_IdPemesan($this->session->id),
+            'jenisTransaksi' => $jenisTransaksi->asObject()->findAll(),
+            'transaksi' => function (int $id_booking) use ($transaksi) {
+
+                return $transaksi->where('id_booking', $id_booking)->findAll();
+            }
         ];
 
         return view('user/pelanggan/pesanan', $data);
