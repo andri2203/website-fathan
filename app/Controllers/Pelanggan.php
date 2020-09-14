@@ -14,12 +14,28 @@ class Pelanggan extends CustomersController
         }
 
         $booking = new \App\Models\BookingModel();
+        $jenisTransaksi = new \App\Models\JenisTransaksi();
+
+        $transaksi = new \App\Models\TransaksiModel();
         $data = [
             'session' => $this->session,
             'diTerima' => $booking->numOfJobSuccess($this->session->id, 'id_pemesan'),
             'diTolak' => $booking->numOfJobDenied($this->session->id, 'id_pemesan'),
             'jamAcara' => $booking->numOfJobEvent_Hour($this->session->id, 'id_pemesan'),
             'pesanan' => $booking->getPesananBy_IdPemesan_dash($this->session->id),
+            'jenisTransaksi' => $jenisTransaksi->where('id_jenis_transaksi !=', 4)->asObject()->findAll(),
+            'transaksi' => function ($id_booking) use ($transaksi) {
+
+                return $transaksi->ambilTransaksiByBookingId($id_booking);
+            },
+            'transaksi_AllData' => function ($id_booking) use ($transaksi) {
+
+                return $transaksi->jumlahDataTransaksi($id_booking);
+            },
+            'transaksi_JumlahBudget' => function ($id_booking) use ($transaksi) {
+
+                return $transaksi->jumlahBudgetTransaksi($id_booking);
+            }
         ];
 
         return view('user/pelanggan/beranda', $data);
@@ -35,15 +51,23 @@ class Pelanggan extends CustomersController
 
         $booking = new \App\Models\BookingModel();
         $jenisTransaksi = new \App\Models\JenisTransaksi();
+        $transaksi = new \App\Models\TransaksiModel();
 
         $data = [
             'session' => $this->session,
             'pesanan' => $booking->getPesananBy_IdPemesan($this->session->id),
             'jenisTransaksi' => $jenisTransaksi->where('id_jenis_transaksi !=', 4)->asObject()->findAll(),
-            'transaksi' => function ($id_booking) {
-                $transaksi = new \App\Models\Transaksi();
+            'transaksi' => function ($id_booking) use ($transaksi) {
 
                 return $transaksi->ambilTransaksiByBookingId($id_booking);
+            },
+            'transaksi_AllData' => function ($id_booking) use ($transaksi) {
+
+                return $transaksi->jumlahDataTransaksi($id_booking);
+            },
+            'transaksi_JumlahBudget' => function ($id_booking) use ($transaksi) {
+
+                return $transaksi->jumlahBudgetTransaksi($id_booking);
             }
         ];
 

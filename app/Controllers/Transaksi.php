@@ -16,7 +16,7 @@ class Transaksi extends BaseController
 
     public function add_transaksi(int $id_booking = null)
     {
-        $transaksi = new \App\Models\Transaksi();
+        $transaksi = new \App\Models\TransaksiModel();
 
         $id_jenis_transaksi = $this->request->getPost("jenis_transaksi_$id_booking");
         $total_pembayaran = $this->request->getPost("total_$id_booking");
@@ -51,7 +51,7 @@ class Transaksi extends BaseController
 
     public function update_transaksi($id_transaksi)
     {
-        $transaksi = new \App\Models\Transaksi();
+        $transaksi = new \App\Models\TransaksiModel();
         $id_jenis_transaksi = $this->request->getPost("u_jenis_transaksi_$id_transaksi");
         $total_pembayaran = $this->request->getPost("u_total_$id_transaksi");
         $file_pembayaran = $this->request->getFile("u_file_$id_transaksi");
@@ -94,7 +94,7 @@ class Transaksi extends BaseController
 
     public function pelunasan_transaksi(int $id_booking = null)
     {
-        $transaksi = new \App\Models\Transaksi();
+        $transaksi = new \App\Models\TransaksiModel();
 
         $total_pembayaran = $this->request->getPost("p_total_$id_booking");
         $file_pembayaran = $this->request->getFile("p_file_$id_booking");
@@ -113,9 +113,9 @@ class Transaksi extends BaseController
             ];
 
             if ($transaksi->save($upload)) :
-                return redirect()->to('/pelanggan/pesanan')->with('success', 'Berhasil Membuat Pembayaran.');
+                return redirect()->to('/pelanggan/pesanan')->with('success', 'Berhasil Membuat Pelunasan.');
             else :
-                return redirect()->to('/pelanggan/pesanan')->with('error', 'Gagal Membuat Pembayaran : ' . $transaksi->errors());
+                return redirect()->to('/pelanggan/pesanan')->with('error', 'Gagal Membuat Pelunasan : ' . $transaksi->errors());
             endif;
         else :
             return redirect()->to('/pelanggan/pesanan')->with('error', "Error : " . $file_pembayaran->getErrorString());

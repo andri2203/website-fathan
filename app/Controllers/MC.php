@@ -31,10 +31,16 @@ class MC extends McController
         }
 
         $bookingModel = new \App\Models\BookingModel();
-
+        $transaksi = new \App\Models\TransaksiModel();
         $data = [
             'pesanan' => $bookingModel->getPesananBy_IdMC($this->session->id),
-            'session' => $this->session
+            'session' => $this->session, 'transaksi' => function ($id_booking) use ($transaksi) {
+                return $transaksi->ambilTransaksiByBookingId($id_booking);
+            }, 'transaksi_AllData' => function ($id_booking) use ($transaksi) {
+                return $transaksi->jumlahDataTransaksi($id_booking);
+            }, 'transaksi_JumlahBudget' => function ($id_booking) use ($transaksi) {
+                return $transaksi->jumlahBudgetTransaksi($id_booking);
+            }
         ];
 
         return view('user/mc/v_pesanan', $data);
@@ -129,5 +135,4 @@ class MC extends McController
         $bookingModel->update($id_booking, ['di_terima' => 3]);
         return redirect()->to('/mc/booking')->with('success', 'Konfirmasi acara selesai. Acara telah selesai diselenggarakan.');
     }
-    
 }

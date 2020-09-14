@@ -73,7 +73,7 @@
                                                 <td>Rp. <?= number_format($row['budget'], 0, '.', ',') ?></td>
                                                 <td <?= $row['di_terima'] != 0 ? 'colspan="2"' : '' ?> class="text-center">
                                                     <?php if ($row['di_terima'] == 1) : ?>
-                                                        <?php if ($transaksi($row['id_booking'])->countAllResults() == 0) : ?>
+                                                        <?php if ($transaksi_AllData($row['id_booking']) == 0) : ?>
                                                             <button class="btn btn-sm btn-warning" data-toggle="modal" data-target="#trans-<?= $row['id_booking'] ?>">Pembayaran</button>
                                                             <div class="modal fade text-left" id="trans-<?= $row['id_booking'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                                 <div class="modal-dialog">
@@ -125,12 +125,56 @@
                                                                 </div>
                                                             </div>
                                                         <?php else :
-                                                            $trans = $transaksi($row['id_booking'])->get()->getRowObject();
+                                                            $queryTrans = $transaksi($row['id_booking']);
+                                                            $trans = $queryTrans->getRowObject();
                                                         ?>
-                                                            <?php if ($trans->id_jenis_transaksi == 3 || $trans->jumlah == $row['budget']) : ?>
-                                                                <button class="btn btn-sm btn-info" data-toggle="modal" data-target="#after-<?= $row['id_booking'] ?>">
+                                                            <?php if ($trans->id_jenis_transaksi == 3 || $transaksi_JumlahBudget($row['id_booking'])->total == $row['budget']) : ?>
+                                                                <button class="btn btn-sm btn-info" data-toggle="modal" data-target="#lunas-<?= $row['id_booking'] ?>">
                                                                     Lunas
                                                                 </button>
+                                                                <div class="modal fade text-left" id="lunas-<?= $row['id_booking'] ?>">
+                                                                    <div class="modal-dialog">
+                                                                        <div class="modal-content">
+                                                                            <div class="modal-body table-responsive">
+                                                                                <h5 class="modal-title text-center font-weight-bold mb-2">Riwayat Pembayaran</h5>
+                                                                                <table class="table table-bordered table-striped">
+                                                                                    <thead>
+                                                                                        <tr>
+                                                                                            <th>#</th>
+                                                                                            <th>Tanggal</th>
+                                                                                            <th>Jenis Transaksi</th>
+                                                                                            <th>Jumlah</th>
+                                                                                            <th>Bukti Transfer</th>
+                                                                                        </tr>
+                                                                                    </thead>
+                                                                                    <tbody>
+                                                                                        <?php
+                                                                                        $qtrans =  $queryTrans->getResultArray();
+                                                                                        $i = 1;
+                                                                                        foreach ($qtrans as $rt) :
+                                                                                        ?>
+                                                                                            <tr>
+                                                                                                <td><?= $i++ ?></td>
+                                                                                                <td><?= date("d F Y, G:i:s", strtotime($rt['tanggal'])) ?></td>
+                                                                                                <td><?= $rt['jenis_transaksi'] ?></td>
+                                                                                                <td>Rp. <?= number_format($rt['jumlah'], 0, '.', ',') ?></td>
+                                                                                                <td width=350>
+                                                                                                    <img src="<?= "/uploads/{$session->id}/transaksi/" ?><?= $rt['bukti_pembayaran'] ?>" alt="<?= $rt['jenis_transaksi'] ?>" class="img-fluid">
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        <?php endforeach; ?>
+                                                                                    </tbody>
+                                                                                    <tfoot class="tfoot-success">
+                                                                                        <tr>
+                                                                                            <th colspan="4">Total </th>
+                                                                                            <th>Rp. <?= number_format($transaksi_JumlahBudget($row['id_booking'])->total, 0, '.', ',') ?></th>
+                                                                                        </tr>
+                                                                                    </tfoot>
+                                                                                </table>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             <?php else : ?>
                                                                 <div class="btn-group-vertical">
                                                                     <button class="btn btn-sm btn-success" data-toggle="modal" data-target="#after-<?= $row['id_booking'] ?>">
@@ -151,18 +195,18 @@
                                                                                     <span aria-hidden="true">&times;</span>
                                                                                 </button>
                                                                             </div>
-                                                                            <form action="/pelanggan/transaksi/pelunasan/<?= $row['id_booking'] ?>">
+                                                                            <form action="/pelanggan/transaksi/pelunasan/<?= $row['id_booking'] ?>" method="POST" enctype="multipart/form-data">
                                                                                 <div class="modal-body">
                                                                                     <div class="form-group">
                                                                                         <h6 class="modal-text">Pelunasan: Rp. <?= number_format($sisa * -1, 0, '.', ',') ?></h6>
                                                                                     </div>
                                                                                     <div class="form-group">
-                                                                                        <label for="total_<?= $row['id_booking'] ?>" class="control-label">Sisa Pembayaran</label>
+                                                                                        <label for="p_total_<?= $row['id_booking'] ?>" class="control-label">Sisa Pembayaran</label>
                                                                                         <input type="number" value="<?= $sisa ?>" name="p_total_<?= $row['id_booking'] ?>" id="total_<?= $row['id_booking'] ?>" class="form-control" readonly>
                                                                                     </div>
                                                                                     <div class="form-group">
-                                                                                        <label for="file_<?= $row['id_booking'] ?>">Bukti Pembayaran</label>
-                                                                                        <input type="file" class="form-control-file" name="file_<?= $row['id_booking'] ?>" id="file_<?= $row['id_booking'] ?>" required>
+                                                                                        <label for="p_file_<?= $row['id_booking'] ?>">Bukti Pembayaran</label>
+                                                                                        <input type="file" class="form-control-file" name="p_file_<?= $row['id_booking'] ?>" id="file_<?= $row['id_booking'] ?>" required>
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="modal-footer">
@@ -173,65 +217,65 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
+                                                                <div class="modal fade  text-left" id="after-<?= $row['id_booking'] ?>">
+                                                                    <div class="modal-dialog modal-lg">
+                                                                        <div class="modal-content">
+                                                                            <div class="modal-header">
+                                                                                <h5 class="modal-title">Data Transaksi: <?= $trans->jenis_transaksi ?></h5>
+
+                                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                                    <span aria-hidden="true">&times;</span>
+                                                                                </button>
+                                                                            </div>
+                                                                            <form action="/pelanggan/transaksi/<?= $trans->id_transaksi ?>/update" method="POST" enctype="multipart/form-data">
+                                                                                <div class="modal-body">
+                                                                                    <div class="form-group">
+                                                                                        <label for="u_jenis_transaksi_<?= $trans->id_transaksi ?>" class="control-label">Jenis Transaksi</label>
+                                                                                        <select name="u_jenis_transaksi_<?= $trans->id_transaksi ?>" id="u_jenis_transaksi_<?= $trans->id_transaksi ?>" class="form-control" required>
+                                                                                            <option value="0" persen="0">-- Pilih Jenis Transaksi</option>
+                                                                                            <?php foreach ($jenisTransaksi as $jt) : ?>
+                                                                                                <option value="<?= $jt->id_jenis_transaksi ?>" persen="<?= $jt->persen ?>" <?= $trans->id_jenis_transaksi == $jt->id_jenis_transaksi ? "selected" : "" ?>><?= $jt->jenis_transaksi ?></option>
+                                                                                            <?php endforeach; ?>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                    <div class="form-group">
+                                                                                        <label for="u_budget_<?= $trans->id_transaksi ?>" class="control-label">Budget Maksimal</label>
+                                                                                        <input type="number" name="u_budget_<?= $trans->id_transaksi ?>" id="u_budget_<?= $trans->id_transaksi ?>" value="<?= $row['budget'] ?>" class="form-control" readonly>
+                                                                                    </div>
+                                                                                    <div class="form-group">
+                                                                                        <label for="u_total_<?= $trans->id_transaksi ?>" class="control-label">Total Pembayaran</label>
+                                                                                        <input type="number" value="<?= $trans->jumlah ?>" name="u_total_<?= $trans->id_transaksi ?>" id="u_total_<?= $trans->id_transaksi ?>" class="form-control" readonly>
+                                                                                    </div>
+                                                                                    <div class="form-row">
+                                                                                        <div class="col-md-4">
+                                                                                            <label for="u_file_<?= $trans->id_transaksi ?>">Ganti Bukti Pembayaran</label>
+                                                                                            <input type="file" class="form-control-file" name="u_file_<?= $trans->id_transaksi ?>" id="u_file_<?= $trans->id_transaksi ?>">
+                                                                                        </div>
+                                                                                        <div class="col-md-8">
+                                                                                            <label class="control-label">Bukti Pembayaran <?= date("d F Y H:i", strtotime($trans->tanggal)) ?></label>
+                                                                                            <img src="/uploads/<?= $session->id ?>/transaksi/<?= $trans->bukti_pembayaran ?>" alt="Bukti Pembayaran" id="bukti-<?= $trans->bukti_pembayaran ?>" class="img-fluid" width="100%">
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="modal-footer">
+                                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                                                                                    <button type="submit" class="btn btn-primary">Update</button>
+                                                                                </div>
+                                                                                <script>
+                                                                                    document.getElementById("u_jenis_transaksi_<?= $trans->id_transaksi ?>").addEventListener('change', function(ev) {
+                                                                                        const opti = document.querySelector('option[value="' + ev.target.value + '"]')
+                                                                                        const persen = opti.getAttribute('persen')
+                                                                                        const res = persen * document.getElementById("u_budget_<?= $trans->id_transaksi ?>").value
+                                                                                        document.getElementById("u_total_<?= $trans->id_transaksi ?>").value = res
+                                                                                    });
+                                                                                </script>
+                                                                            </form>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             <?php endif; ?>
 
 
-                                                            <div class="modal fade  text-left" id="after-<?= $row['id_booking'] ?>">
-                                                                <div class="modal-dialog modal-lg">
-                                                                    <div class="modal-content">
-                                                                        <div class="modal-header">
-                                                                            <h5 class="modal-title">Data Transaksi: <?= $trans->jenis_transaksi ?></h5>
-
-                                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                                <span aria-hidden="true">&times;</span>
-                                                                            </button>
-                                                                        </div>
-                                                                        <form action="/pelanggan/transaksi/<?= $trans->id_transaksi ?>/update" method="POST" enctype="multipart/form-data">
-                                                                            <div class="modal-body">
-                                                                                <div class="form-group">
-                                                                                    <label for="u_jenis_transaksi_<?= $trans->id_transaksi ?>" class="control-label">Jenis Transaksi</label>
-                                                                                    <select name="u_jenis_transaksi_<?= $trans->id_transaksi ?>" id="u_jenis_transaksi_<?= $trans->id_transaksi ?>" class="form-control" required>
-                                                                                        <option value="0" persen="0">-- Pilih Jenis Transaksi</option>
-                                                                                        <?php foreach ($jenisTransaksi as $jt) : ?>
-                                                                                            <option value="<?= $jt->id_jenis_transaksi ?>" persen="<?= $jt->persen ?>" <?= $trans->id_jenis_transaksi == $jt->id_jenis_transaksi ? "selected" : "" ?>><?= $jt->jenis_transaksi ?></option>
-                                                                                        <?php endforeach; ?>
-                                                                                    </select>
-                                                                                </div>
-                                                                                <div class="form-group">
-                                                                                    <label for="u_budget_<?= $trans->id_transaksi ?>" class="control-label">Budget Maksimal</label>
-                                                                                    <input type="number" name="u_budget_<?= $trans->id_transaksi ?>" id="u_budget_<?= $trans->id_transaksi ?>" value="<?= $row['budget'] ?>" class="form-control" readonly>
-                                                                                </div>
-                                                                                <div class="form-group">
-                                                                                    <label for="u_total_<?= $trans->id_transaksi ?>" class="control-label">Total Pembayaran</label>
-                                                                                    <input type="number" value="<?= $trans->jumlah ?>" name="u_total_<?= $trans->id_transaksi ?>" id="u_total_<?= $trans->id_transaksi ?>" class="form-control" readonly>
-                                                                                </div>
-                                                                                <div class="form-row">
-                                                                                    <div class="col-md-4">
-                                                                                        <label for="u_file_<?= $trans->id_transaksi ?>">Ganti Bukti Pembayaran</label>
-                                                                                        <input type="file" class="form-control-file" name="u_file_<?= $trans->id_transaksi ?>" id="u_file_<?= $trans->id_transaksi ?>">
-                                                                                    </div>
-                                                                                    <div class="col-md-8">
-                                                                                        <label class="control-label">Bukti Pembayaran <?= date("d F Y H:i", strtotime($trans->tanggal)) ?></label>
-                                                                                        <img src="/uploads/<?= $session->id ?>/transaksi/<?= $trans->bukti_pembayaran ?>" alt="Bukti Pembayaran" id="bukti-<?= $trans->bukti_pembayaran ?>" class="img-fluid" width="100%">
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="modal-footer">
-                                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-                                                                                <button type="submit" class="btn btn-primary">Update</button>
-                                                                            </div>
-                                                                            <script>
-                                                                                document.getElementById("u_jenis_transaksi_<?= $trans->id_transaksi ?>").addEventListener('change', function(ev) {
-                                                                                    const opti = document.querySelector('option[value="' + ev.target.value + '"]')
-                                                                                    const persen = opti.getAttribute('persen')
-                                                                                    const res = persen * document.getElementById("u_budget_<?= $trans->id_transaksi ?>").value
-                                                                                    document.getElementById("u_total_<?= $trans->id_transaksi ?>").value = res
-                                                                                });
-                                                                            </script>
-                                                                        </form>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
                                                         <?php endif; ?>
                                                     <?php elseif ($row['di_terima'] == 2) : ?>
                                                         <span class="btn btn-sm btn-danger">Ditolak</span>
