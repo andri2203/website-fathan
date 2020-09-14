@@ -129,6 +129,7 @@ $routes->group('profil', function ($routes) {
 	$routes->post('profil_saya', 'Profile::ubah_profil');
 	$routes->post('ganti_password', 'Profile::ganti_password');
 	$routes->post('ganti_foto', 'Profile::ganti_foto');
+	$routes->post('foto_ktp', 'Profile::foto_ktp');
 });
 
 

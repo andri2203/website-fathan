@@ -9,9 +9,21 @@ class Transaksi extends BaseController
 
     public function view_mc()
     {
+        $transaksi = new \App\Models\TransaksiModel();
+        $data = [
+            'transaksi' => $transaksi->transaksi_mc($this->session->id),
+            'session' => $this->session,
+        ];
+        return view('user/mc/v_transaksi', $data);
     }
     public function view_pelanggan()
     {
+        $transaksi = new \App\Models\TransaksiModel();
+        $data = [
+            'transaksi' => $transaksi->transaksi_pelanggan($this->session->id),
+            'session' => $this->session,
+        ];
+        return view('user/pelanggan/v_transaksi', $data);
     }
 
     public function add_transaksi(int $id_booking = null)

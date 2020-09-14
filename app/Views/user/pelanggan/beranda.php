@@ -97,7 +97,7 @@
                                                 <td><?= $row['alamat'] ?></td>
                                                 <td><?= $row['keterangan'] ?></td>
                                                 <td>Rp. <?= number_format($row['budget'], 0, '.', ',') ?></td>
-                                                <td <?= $row['di_terima'] != 0 ? 'colspan="2"' : '' ?> class="text-center">
+                                                <td <?= $row['di_terima'] != 0 || strtotime($row['tanggal_jam']) < time() ? 'colspan="2"' : '' ?> class="text-center">
                                                     <?php if ($row['di_terima'] == 1) : ?>
                                                         <?php if ($transaksi_AllData($row['id_booking']) == 0) : ?>
                                                             <button class="btn btn-sm btn-warning" data-toggle="modal" data-target="#trans-<?= $row['id_booking'] ?>">Pembayaran</button>
@@ -347,12 +347,14 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+
+                                                    <?php elseif ($row['di_terima'] == 0 && strtotime($row['tanggal_jam']) < time()) : ?>
+                                                        <span class="btn btn-sm btn-danger" onclick="alert('Tidak ada proses terjadi setelah tanggal acara.')">Berakhir</span>
                                                     <?php else : ?>
                                                         <span class="btn btn-sm btn-warning">Proses</span>
-
                                                     <?php endif ?>
                                                 </td>
-                                                <?php if ($row['di_terima'] == 0) : ?>
+                                                <?php if ($row['di_terima'] == 0 && strtotime($row['tanggal_jam']) > time()) : ?>
                                                     <td>
                                                         <div class="btn-group-vertical">
                                                             <!--<a href="/booking/update/<?= $row['id_booking'] ?>" class="btn btn-sm btn-warning"><i class="fas fa-pencil-alt"></i></a>-->

@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 4.9.0.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 30 Jul 2020 pada 20.12
--- Versi server: 10.4.13-MariaDB
--- Versi PHP: 7.4.8
+-- Waktu pembuatan: 14 Sep 2020 pada 15.38
+-- Versi server: 10.4.6-MariaDB
+-- Versi PHP: 7.2.22
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -39,19 +40,21 @@ CREATE TABLE `booking` (
   `alamat` varchar(256) NOT NULL,
   `keterangan` varchar(256) NOT NULL,
   `budget` int(11) NOT NULL,
-  `di_terima` int(11) NOT NULL
+  `di_terima` int(11) NOT NULL,
+  `point` double NOT NULL,
+  `ulasan` varchar(128) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `booking`
 --
 
-INSERT INTO `booking` (`id_booking`, `id_acara`, `id_pemesan`, `id_mc`, `tanggal_jam`, `jam_acara`, `jumlah_peserta`, `profil_peserta`, `alamat`, `keterangan`, `budget`, `di_terima`) VALUES
-(2, 3, 5, 4, '2020-07-27 15:00:00', 5, 800, 'Keluarga', 'Gedung serba guna Medan', '', 2000000, 1),
-(3, 3, 5, 2, '2020-07-27 15:00:00', 5, 800, 'Keluarga', 'Gedung serba guna Medan', '', 2000000, 1),
-(4, 2, 2, 2, '2020-07-27 22:00:00', 2, 50, 'Anak - Anak', 'Jl. Mangga Dua. No. 50 kec. Nebula kab. Asgardia, Asgard', '', 1000000, 1),
-(5, 2, 5, 3, '2020-07-23 22:00:00', 1, 200, 'Mahasiswa', 'Apa aja', '', 10000000, 1),
-(6, 2, 5, 4, '2020-07-23 22:00:00', 4, 200, 'Mahasiswa', 'Apa aja', '', 10000000, 2);
+INSERT INTO `booking` (`id_booking`, `id_acara`, `id_pemesan`, `id_mc`, `tanggal_jam`, `jam_acara`, `jumlah_peserta`, `profil_peserta`, `alamat`, `keterangan`, `budget`, `di_terima`, `point`, `ulasan`) VALUES
+(2, 3, 5, 4, '2020-07-27 15:00:00', 5, 800, 'Keluarga', 'Gedung serba guna Medan', '', 2000000, 1, 0, ''),
+(3, 3, 5, 2, '2020-07-27 15:00:00', 5, 800, 'Keluarga', 'Gedung serba guna Medan', '', 2000000, 1, 0, ''),
+(4, 2, 5, 2, '2020-07-14 00:00:00', 2, 50, 'Anak - Anak', 'Jl. Mangga Dua. No. 50 kec. Nebula kab. Asgardia, Asgard', '', 1000000, 0, 0, ''),
+(5, 2, 5, 2, '2020-07-23 22:00:00', 1, 200, 'Mahasiswa', 'Apa aja', '', 10000000, 1, 0, ''),
+(6, 2, 5, 4, '2020-07-23 22:00:00', 4, 200, 'Mahasiswa', 'Apa aja', '', 10000000, 2, 0, '');
 
 -- --------------------------------------------------------
 
@@ -74,6 +77,28 @@ INSERT INTO `jenis_acara` (`id_jenis_acara`, `jenis_acara`, `kode_warna`) VALUES
 (2, 'Ulang Tahun', '#F74CBE'),
 (3, 'Pernikahan', '#E235FF'),
 (4, 'Peresmian', '#1659FF');
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `jenis_transaksi`
+--
+
+CREATE TABLE `jenis_transaksi` (
+  `id_jenis_transaksi` int(11) NOT NULL,
+  `jenis_transaksi` varchar(30) NOT NULL,
+  `persen` double NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data untuk tabel `jenis_transaksi`
+--
+
+INSERT INTO `jenis_transaksi` (`id_jenis_transaksi`, `jenis_transaksi`, `persen`) VALUES
+(1, 'Pembayaran 20%', 0.2),
+(2, 'Pembayaran 50%', 0.5),
+(3, 'Pembayaran Lunas', 1),
+(4, 'Pelunasan Cicilan', 0);
 
 -- --------------------------------------------------------
 
@@ -188,7 +213,33 @@ INSERT INTO `sub_menu` (`sub_menu_id`, `menu_id`, `sub_menu`, `sub_route`) VALUE
 (13, 8, 'Profil Saya', 'profil_saya'),
 (15, 1, 'Jenis Acara', 'jenis_acara'),
 (16, 6, 'Promosi', 'promosi'),
-(17, 6, 'Pesanan Saya', 'pesanan');
+(17, 6, 'Pesanan Saya', 'pesanan'),
+(18, 6, 'Riwayat Transaksi', 'transaksi'),
+(19, 7, 'Riwayat Transaksi', 'transaksi');
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `transaksi`
+--
+
+CREATE TABLE `transaksi` (
+  `id_transaksi` int(11) NOT NULL,
+  `id_booking` int(11) NOT NULL,
+  `id_jenis_transaksi` int(11) NOT NULL,
+  `tanggal` datetime NOT NULL,
+  `jumlah` int(11) NOT NULL,
+  `bukti_pembayaran` varchar(128) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data untuk tabel `transaksi`
+--
+
+INSERT INTO `transaksi` (`id_transaksi`, `id_booking`, `id_jenis_transaksi`, `tanggal`, `jumlah`, `bukti_pembayaran`) VALUES
+(1, 5, 2, '2020-09-11 03:47:05', 5000000, 'transaksi-1-3-10000000.png'),
+(2, 5, 4, '2020-09-11 05:28:18', 5000000, 'transaksi-5-pelunasan.png'),
+(3, 3, 2, '2020-09-13 21:12:28', 1000000, 'transaksi-3-2-1000000.png');
 
 -- --------------------------------------------------------
 
@@ -206,19 +257,20 @@ CREATE TABLE `users` (
   `image` varchar(128) NOT NULL,
   `phone` varchar(20) NOT NULL,
   `create_at` datetime NOT NULL,
-  `is_active` int(11) NOT NULL
+  `is_active` int(11) NOT NULL,
+  `ktp` varchar(128) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data untuk tabel `users`
 --
 
-INSERT INTO `users` (`users_id`, `role_id`, `name`, `gender`, `email`, `password`, `image`, `phone`, `create_at`, `is_active`) VALUES
-(1, 1, 'Admin', 'Laki - Laki', 'admin@gmail.com', '0192023a7bbd73250516f069df18b500', '', '', '2020-06-24 08:27:44', 1),
-(2, 2, 'Users', 'Laki - Laki', 'user@gmail.com', '85064efb60a9601805dcea56ec5402f7', 'user8-128x128.jpg', '085258839713', '2020-07-09 13:36:52', 1),
-(3, 2, 'Mc Fathan', 'Laki - Laki', 'fathan.mc@gmail.com', '93f824c70a1efc4ae3614a5ab181a5cc', '', '+6285362367044', '2020-07-12 11:57:11', 1),
-(4, 2, 'Jhon Alpha ', 'Laki - Laki', 'JA.voicer@gmail.com', '116db60f10e4506b47a9cc5b37ab9daf', '', '+6288772455506', '2020-07-12 12:00:25', 1),
-(5, 3, 'Mina Ayunda', 'Perempuan', 'mina@gmail.com', '85064efb60a9601805dcea56ec5402f7', 'user3-128x128.jpg', '081275301288', '2020-07-18 23:55:03', 1);
+INSERT INTO `users` (`users_id`, `role_id`, `name`, `gender`, `email`, `password`, `image`, `phone`, `create_at`, `is_active`, `ktp`) VALUES
+(1, 1, 'Admin', 'Laki - Laki', 'admin@gmail.com', '0192023a7bbd73250516f069df18b500', '', '', '2020-06-24 08:27:44', 1, ''),
+(2, 2, 'Users', 'Laki - Laki', 'user@gmail.com', '85064efb60a9601805dcea56ec5402f7', 'user8-128x128.jpg', '085258839713', '2020-07-09 13:36:52', 1, ''),
+(3, 2, 'Mc Fathan', 'Laki - Laki', 'fathan.mc@gmail.com', '93f824c70a1efc4ae3614a5ab181a5cc', '', '+6285362367044', '2020-07-12 11:57:11', 1, ''),
+(4, 2, 'Jhon Alpha ', 'Laki - Laki', 'JA.voicer@gmail.com', '116db60f10e4506b47a9cc5b37ab9daf', '', '+6288772455506', '2020-07-12 12:00:25', 1, ''),
+(5, 3, 'Mina Ayunda', 'Perempuan', 'mina@gmail.com', '85064efb60a9601805dcea56ec5402f7', 'picture.jpg', '081275301288', '2020-07-18 23:55:03', 1, 'ktp.png');
 
 -- --------------------------------------------------------
 
@@ -286,6 +338,12 @@ ALTER TABLE `jenis_acara`
   ADD PRIMARY KEY (`id_jenis_acara`);
 
 --
+-- Indeks untuk tabel `jenis_transaksi`
+--
+ALTER TABLE `jenis_transaksi`
+  ADD PRIMARY KEY (`id_jenis_transaksi`);
+
+--
 -- Indeks untuk tabel `kota`
 --
 ALTER TABLE `kota`
@@ -308,6 +366,12 @@ ALTER TABLE `promosi`
 --
 ALTER TABLE `sub_menu`
   ADD PRIMARY KEY (`sub_menu_id`);
+
+--
+-- Indeks untuk tabel `transaksi`
+--
+ALTER TABLE `transaksi`
+  ADD PRIMARY KEY (`id_transaksi`);
 
 --
 -- Indeks untuk tabel `users`
@@ -344,6 +408,12 @@ ALTER TABLE `jenis_acara`
   MODIFY `id_jenis_acara` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
+-- AUTO_INCREMENT untuk tabel `jenis_transaksi`
+--
+ALTER TABLE `jenis_transaksi`
+  MODIFY `id_jenis_transaksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
 -- AUTO_INCREMENT untuk tabel `menu`
 --
 ALTER TABLE `menu`
@@ -359,7 +429,13 @@ ALTER TABLE `promosi`
 -- AUTO_INCREMENT untuk tabel `sub_menu`
 --
 ALTER TABLE `sub_menu`
-  MODIFY `sub_menu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `sub_menu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+
+--
+-- AUTO_INCREMENT untuk tabel `transaksi`
+--
+ALTER TABLE `transaksi`
+  MODIFY `id_transaksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT untuk tabel `users`

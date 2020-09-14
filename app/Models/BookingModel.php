@@ -117,6 +117,13 @@ class BookingModel extends Model
         return $events;
     }
 
+    public function numOfJobEnd($id, $q = 'id_mc')
+    {
+        $builder = $this->db->table($this->table);
+        $builder->where([$q => $id, 'di_terima' => 0, 'tanggal_jam <' => date("Y-m-d 23:59:59")]);
+        return $builder->countAllResults();
+    }
+
     public function numOfJobSuccess($id, $q = 'id_mc')
     {
         $builder = $this->db->table($this->table);

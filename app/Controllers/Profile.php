@@ -58,6 +58,21 @@ class Profile extends ProfileController
         return redirect()->to('/profil/profil_saya')->with('berhasil', 'Foto Akun anda telah diperbaharui');
     }
 
+    public function foto_ktp()
+    {
+        $avatar = $this->request->getFile('foto');
+        $path = FCPATH . 'uploads/' . $this->session->id . '/ktp';
+        if (!file_exists($path)) {
+            mkdir($path);
+        }
+        $avatar->move($path);
+        $data = [
+            'ktp' => $avatar->getName()
+        ];
+        $this->userModel->update($this->session->id, $data);
+        return redirect()->to('/profil/profil_saya')->with('berhasil', 'Foto KTP anda telah diperbaharui');
+    }
+
     public function ganti_password()
     {
         $data = array(

@@ -78,6 +78,8 @@ class Booking extends BaseController
                 'keterangan' => $input['keterangan'],
                 'budget' => $input['budget'],
                 'di_terima' => 0,
+                'point' => 0,
+                'ulasan' => ''
             ));
         } else {
             $batch = array();
@@ -94,6 +96,8 @@ class Booking extends BaseController
                     'keterangan' => $input['keterangan'],
                     'budget' => $input['budget'],
                     'di_terima' => 0,
+                    'point' => 0,
+                    'ulasan' => ''
                 ));
             }
             $bookingModel->insertBatch($batch);

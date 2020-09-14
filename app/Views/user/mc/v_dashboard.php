@@ -34,8 +34,8 @@
                     <div class="info-box">
                         <span class="info-box-icon bg-info"><i class="far fa-star"></i></span>
                         <div class="info-box-content">
-                            <span class="info-box-text">Job yang Diterima</span>
-                            <span class="info-box-number"><?= $diTerima ?></span>
+                            <span class="info-box-text">Acara yang Diterima</span>
+                            <span class="info-box-number"><?= $diTerima ?> Acara</span>
                         </div>
                     </div>
                 </div>
@@ -43,28 +43,28 @@
                     <div class="info-box">
                         <span class="info-box-icon bg-info"><i class="far fa-star"></i></span>
                         <div class="info-box-content">
-                            <span class="info-box-text">Job yang Ditolak</span>
-                            <span class="info-box-number"><?= $diTolak ?></span>
+                            <span class="info-box-text">Acara yang Ditolak</span>
+                            <span class="info-box-number"><?= $diTolak ?> Acara</span>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-6 col-12">
-                    <div class="info-box">
+                    <div class="info-box" onclick="alert('Acara berakhir tanpa proses terima / tolak')" style="cursor: pointer;">
                         <span class="info-box-icon bg-info"><i class="far fa-star"></i></span>
                         <div class="info-box-content">
-                            <span class="info-box-text">Total Mengisi Acara</span>
-                            <span class="info-box-number"><?= $jamAcara['jam'] ?></span>
+                            <span class="info-box-text">Acara Berakhir</span>
+                            <span class="info-box-number"><?= $job_berakhir ?> Acara</span>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-6 col-12">
-                    <div class="info-box">
+                    <a href="/mc/transaksi" class="info-box text-dark">
                         <span class="info-box-icon bg-info"><i class="far fa-star"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Saldo Anda</span>
                             <span class="info-box-number">Rp. <?= number_format($saldo['saldo'], 0, '.', ',')  ?></span>
                         </div>
-                    </div>
+                    </a>
                 </div>
             </div>
             <!-- /.row -->
@@ -89,7 +89,10 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php foreach ($pesanan as $row) : ?>
+                                        <?php foreach ($pesanan as $row) :
+                                            $trans = $transaksi($row['id_booking']);
+                                            $transRow = $trans->getRowArray();
+                                            $transResult = $trans->getResultarray(); ?>
                                             <tr>
                                                 <td><?= $row['jenis_acara'] ?></td>
                                                 <td><?= date('d F Y, G:i', strtotime($row['tanggal_jam'])) ?></td>
@@ -164,15 +167,33 @@
                                                                     </form>
                                                                     <div class="d-flex justify-content-center">
                                                                         <?php if ($row['di_terima'] == 1) : ?>
-                                                                            <a href="/mc/selesai/<?= $row['id_booking'] ?>" onclick="return confirm('Apakah Acara ini telah selesai? Klik OK jika acara telah anda laksanakan.')" class="btn btn-sm btn-success">Diterima</a>
+                                                                            <?php if ($transRow['id_jenis_transaksi'] == 3 || $transaksi_JumlahBudget($row['id_booking'])->total == $row['budget']) : ?>
+                                                                                <div class="btn-group">
+                                                                                    <button class="btn btn-sm btn-info" data-toggle="modal" data-target="#trans-<?= $row['id_booking'] ?>">Lunas</button>
+                                                                                    <a href="/mc/selesai/<?= $row['id_booking'] ?>" onclick="return confirm('Apakah Acara ini telah selesai? Klik OK jika acara telah anda laksanakan.')" class="btn btn-sm btn-success">Selesai</a>
+                                                                                </div>
+                                                                            <?php else : ?>
+                                                                                <?php if ($transaksi_AllData($row['id_booking']) == 0) : ?>
+                                                                                    <button class="btn btn-sm btn-warning" onclick="alert('<?= $row['name'] ?> Belum Melakukan Pembayaran.')">Pembayaran</button>
+                                                                                <?php else : ?>
+                                                                                    <button class="btn btn-sm btn-info" data-toggle="modal" data-target="#trans-<?= $row['id_booking'] ?>"><?= $transRow['jenis_transaksi'] ?></button>
+                                                                                <?php endif ?>
+                                                                            <?php endif ?>
                                                                         <?php elseif ($row['di_terima'] == 2) : ?>
                                                                             <span class="btn btn-sm btn-danger">Ditolak</span>
                                                                         <?php elseif ($row['di_terima'] == 3) : ?>
                                                                             <span class="btn btn-sm btn-success">Selesai</span>
-                                                                        <?php else : ?>
-                                                                            <a href="/mc/tolak/<?= $row['id_booking'] ?>" class="btn btn-danger mr-3" onclick="return confirm('Yakin ingin menolak?')">Tolak</a>
-                                                                            <a href="/mc/terima/<?= $row['id_booking'] ?>" class="btn btn-success" onclick="return confirm('Anda akan menerima tawaran MC ini.')">Terima</a>
-                                                                        <?php endif ?>
+                                                                            <?php else :
+                                                                            if (strtotime($row['tanggal_jam']) < time()) :
+                                                                            ?>
+                                                                                <span class="btn btn-sm btn-danger">Berakhir. Tidak ada proses terjadi setelah tanggal acara.</span>
+                                                                            <?php else : ?>
+                                                                                <a href="/mc/tolak/<?= $row['id_booking'] ?>" class="btn btn-danger mr-3" onclick="return confirm('Yakin ingin menolak?')">Tolak</a>
+                                                                                <a href="/mc/terima/<?= $row['id_booking'] ?>" class="btn btn-success" onclick="return confirm('Anda akan menerima tawaran MC ini.')">Terima</a>
+                                                                        <?php
+                                                                            endif;
+                                                                        endif;
+                                                                        ?>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -180,8 +201,25 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <?php if ($row['di_terima'] == 1) : ?>
-                                                        <a href="/mc/selesai/<?= $row['id_booking'] ?>" onclick="return confirm('Apakah Acara ini telah selesai? Klik OK jika acara telah anda laksanakan.')" class="btn btn-sm btn-success">Diterima</a>
+                                                    <?php if ($row['di_terima'] == 1) :
+
+                                                    ?>
+                                                        <?php if ($transRow['id_jenis_transaksi'] == 3 || $transaksi_JumlahBudget($row['id_booking'])->total == $row['budget']) : ?>
+                                                            <div class="btn-group">
+                                                                <button class="btn btn-sm btn-info" data-toggle="modal" data-target="#trans-<?= $row['id_booking'] ?>">Lunas</button>
+                                                                <a href="/mc/selesai/<?= $row['id_booking'] ?>" onclick="return confirm('Apakah Acara ini telah selesai? Klik OK jika acara telah anda laksanakan.')" class="btn btn-sm btn-success">Selesai</a>
+                                                            </div>
+                                                        <?php else : ?>
+                                                            <?php if ($transaksi_AllData($row['id_booking']) == 0) :
+                                                                if (strtotime($row['tanggal_jam']) < time()) : ?>
+                                                                    <span class="btn btn-sm btn-danger" onclick="alert('Tidak ada proses terjadi setelah tanggal acara.')">Berakhir</span>
+                                                                <?php else : ?>
+                                                                    <button class="btn btn-sm btn-warning" onclick="alert('<?= $row['name'] ?> Belum Melakukan Pembayaran.')">Pembayaran</button>
+                                                                <?php endif; ?>
+                                                            <?php else : ?>
+                                                                <button class="btn btn-sm btn-info" data-toggle="modal" data-target="#trans-<?= $row['id_booking'] ?>"><?= $transRow['jenis_transaksi'] ?></button>
+                                                            <?php endif ?>
+                                                        <?php endif ?>
                                                     <?php elseif ($row['di_terima'] == 2) : ?>
                                                         <span class="btn btn-sm btn-danger">Ditolak</span>
                                                     <?php elseif ($row['di_terima'] == 3) : ?>
@@ -219,9 +257,58 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    <?php else : ?>
-                                                        <span class="btn btn-sm btn-warning">Proses</span>
-                                                    <?php endif ?>
+                                                        <?php else :
+                                                        if (strtotime($row['tanggal_jam']) < time()) :
+                                                        ?>
+                                                            <span class="btn btn-sm btn-danger" onclick="alert('Tidak ada proses terjadi setelah tanggal acara.')">Berakhir</span>
+                                                        <?php else : ?>
+                                                            <span class="btn btn-sm btn-warning">Proses</span>
+                                                    <?php
+                                                        endif;
+                                                    endif;
+                                                    ?>
+                                                    <div class="modal fade text-left" id="trans-<?= $row['id_booking'] ?>">
+                                                        <div class="modal-dialog modal-lg">
+                                                            <div class="modal-content">
+                                                                <div class="modal-body table-responsive">
+                                                                    <h5 class="modal-title text-center font-weight-bold mb-2">Riwayat Pembayaran</h5>
+                                                                    <table class="table table-bordered table-striped">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>#</th>
+                                                                                <th>Tanggal</th>
+                                                                                <th>Jenis Transaksi</th>
+                                                                                <th>Jumlah</th>
+                                                                                <th>Bukti Transfer</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <?php
+                                                                            $i = 1;
+                                                                            foreach ($transResult as $rt) :
+                                                                            ?>
+                                                                                <tr>
+                                                                                    <td><?= $i++ ?></td>
+                                                                                    <td><?= date("d F Y, G:i:s", strtotime($rt['tanggal'])) ?></td>
+                                                                                    <td><?= $rt['jenis_transaksi'] ?></td>
+                                                                                    <td>Rp. <?= number_format($rt['jumlah'], 0, '.', ',') ?></td>
+                                                                                    <td width=350>
+                                                                                        <img src="<?= "/uploads/{$row['id_pemesan']}/transaksi/" ?><?= $rt['bukti_pembayaran'] ?>" alt="<?= $rt['jenis_transaksi'] ?>" class="img-fluid">
+                                                                                    </td>
+                                                                                </tr>
+                                                                            <?php endforeach; ?>
+                                                                        </tbody>
+                                                                        <tfoot class="tfoot-success">
+                                                                            <tr>
+                                                                                <th colspan="4">Total </th>
+                                                                                <th>Rp. <?= number_format($transaksi_JumlahBudget($row['id_booking'])->total, 0, '.', ',') ?></th>
+                                                                            </tr>
+                                                                        </tfoot>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         <?php endforeach ?>

@@ -13,13 +13,21 @@ class MC extends McController
         }
 
         $booking = new \App\Models\BookingModel();
+        $transaksi = new \App\Models\TransaksiModel();
         $data = array(
             'diTerima' => $booking->numOfJobSuccess($this->session->id),
             'diTolak' => $booking->numOfJobDenied($this->session->id),
             'jamAcara' => $booking->numOfJobEvent_Hour($this->session->id),
             'saldo' => $booking->numOfJobBudget($this->session->id),
+            'job_berakhir' => $booking->numOfJobEnd($this->session->id),
             'pesanan' => $booking->getPesananBy_IdMC_dash($this->session->id),
-            'session' => $this->session
+            'session' => $this->session, 'transaksi' => function ($id_booking) use ($transaksi) {
+                return $transaksi->ambilTransaksiByBookingId($id_booking);
+            }, 'transaksi_AllData' => function ($id_booking) use ($transaksi) {
+                return $transaksi->jumlahDataTransaksi($id_booking);
+            }, 'transaksi_JumlahBudget' => function ($id_booking) use ($transaksi) {
+                return $transaksi->jumlahBudgetTransaksi($id_booking);
+            }
         );
         return view('user/mc/v_dashboard', $data);
     }
